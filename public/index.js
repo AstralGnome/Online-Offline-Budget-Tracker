@@ -2,10 +2,13 @@ let transactions = [];
 let myChart;
 
 fetch("/api/transaction")
-  .then((response) => response.json())
+  .then((response) => {
+   return response.json()
+  })
   .then((data) => {
     // save db data on global variable
     transactions = data;
+
     populateTotal();
     populateTable();
     populateChart();
@@ -16,8 +19,7 @@ function populateTotal() {
   let total = transactions
     .reduce((total, t) => {
       return total + parseFloat(t.value);
-  }, 0)
-  .toFixed(2);
+  }, 0).toFixed(2);
 
   let totalEl = document.querySelector("#total");
   totalEl.textContent = total;
