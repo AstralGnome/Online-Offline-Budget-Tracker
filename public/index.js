@@ -2,10 +2,10 @@ let transactions = [];
 let myChart;
 
 fetch("/api/transaction")
-  .then((response) => {
-   return response.json()
+  .then(response => {
+   return response.json();
   })
-  .then((data) => {
+  .then(data => {
     // save db data on global variable
     transactions = data;
 
@@ -29,7 +29,7 @@ function populateTable() {
   let tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
 
-  transactions.forEach((transaction) => {
+  transactions.forEach(transaction => {
     // create and populate a table row
     let tr = document.createElement("tr");
     tr.innerHTML = `
@@ -47,13 +47,13 @@ function populateChart() {
   let sum = 0;
 
   // create date labels for chart
-  let labels = reversed.map((t) => {
+  let labels = reversed.map(t => {
     let date = new Date(t.date);
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   });
 
   // create incremental values for chart
-  let data = reversed.map((t) => {
+  let data = reversed.map(t => {
     sum += parseInt(t.value);
     return sum;
   });
@@ -123,8 +123,10 @@ function sendTransaction(isAdding) {
       "Content-Type": "application/json",
     },
   })
-  .then((response) => response.json())
-  .then((data) => {
+  .then(response => { 
+    return response.json();
+  })
+  .then(data => {
     if (data.errors) {
       errorEl.textContent = "Missing Information";
     } else {
@@ -133,7 +135,7 @@ function sendTransaction(isAdding) {
       amountEl.value = "";
     }
   })
-  .catch((err) => {
+  .catch(err => {
     // fetch failed, so save in indexed db
     saveRecord(transaction);
 
