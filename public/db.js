@@ -1,34 +1,34 @@
 let db;
 const request = indexedDB.open("budget", 1);
 
-request.onupgradeneeded = function(event) {
+request.onupgradeneeded = (event) => {
     const db = event.target.result;
     db.createObjectStore("pending", { autoIncrement: true });
 };
 
-request.onsuccess = function(event) {
+request.onsuccess = (event) => {
   db = event.target.result;
   if (navigator.onLine) {
-    checkDatabaseIndex();
+    checkDatabase();
   }
 };
 
-request.onerror = function(event) {
-  console.log("Oh Nose! " + event.target.errorCode);
+request.onerror = (event) => {
+  console.log("Woops! " + event.target.errorCode);
 };
 
-function saveRecord(record) {
+ const saveRecord = (record) => {
   const transaction = db.transaction(["pending"], "readwrite");
   const store = transaction.objectStore("pending");
   store.add(record);
 }
 
-function checkDatabaseIndex() {
+ const checkDatabase = () => {
   const transaction = db.transaction(["pending"], "readwrite");
   const store = transaction.objectStore("pending");
   const getAll = store.getAll();
   
-  getAll.onsuccess = function() {
+  getAll.onsuccess = () => {
     if (getAll.result.length > 0) {
       fetch("/api/transaction/bulk", {
         method: "POST",
@@ -48,4 +48,4 @@ function checkDatabaseIndex() {
   };
 }
 
-window.addEventListener("online", checkDatabaseIndex);
+window.addEventListener("online", checkDatabase);

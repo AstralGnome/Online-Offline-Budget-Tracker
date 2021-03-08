@@ -3,7 +3,7 @@ let myChart;
 
 fetch("/api/transaction")
   .then(response => {
-   return response.json();
+    return response.json();
   })
   .then(data => {
     // save db data on global variable
@@ -16,9 +16,8 @@ fetch("/api/transaction")
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
-  let total = transactions
-    .reduce((total, t) => {
-      return total + parseInt(t.value);
+  let total = transactions.reduce((total, t) => {
+    return total + parseInt(t.value);
   }, 0);
 
   let totalEl = document.querySelector("#total");
@@ -66,18 +65,16 @@ function populateChart() {
   let ctx = document.getElementById("myChart").getContext("2d");
 
   myChart = new Chart(ctx, {
-    type: "line",
+    type: 'line',
       data: {
         labels,
-        datasets: [
-          {
+        datasets: [{
             label: "Total Over Time",
             fill: true,
             backgroundColor: "#6666ff",
-            data,
-        },
-      ],
-    },
+            data
+        }]
+    }
   });
 }
 
@@ -90,7 +87,8 @@ function sendTransaction(isAdding) {
   if (nameEl.value === "" || amountEl.value === "") {
     errorEl.textContent = "Missing Information";
     return;
-  } else {
+  }
+  else {
     errorEl.textContent = "";
   }
 
@@ -98,7 +96,7 @@ function sendTransaction(isAdding) {
   let transaction = {
     name: nameEl.value,
     value: amountEl.value,
-    date: new Date().toISOString(),
+    date: new Date().toISOString()
   };
 
   // if subtracting funds, convert amount to negative number
@@ -120,16 +118,17 @@ function sendTransaction(isAdding) {
     body: JSON.stringify(transaction),
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   })
-  .then(response => { 
+  .then(response => {    
     return response.json();
   })
   .then(data => {
     if (data.errors) {
       errorEl.textContent = "Missing Information";
-    } else {
+    }
+    else {
       // clear form
       nameEl.value = "";
       amountEl.value = "";
